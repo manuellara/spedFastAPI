@@ -1,0 +1,64 @@
+{
+    "mapping":[
+      {
+        "Aeries":"ID",
+        "SEIS":"District ID",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"DI",
+        "SEIS":"Disability 1 Code",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"DI2",
+        "SEIS":"Disability 2 Code",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"ED",
+        "SEIS":"Date of Original SpEd Entry",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"XD",
+        "SEIS":"Date of Exit from SpEd",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"XR",
+        "SEIS":"Exit Reason",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"DS",
+        "SEIS":"District of SPED Accountability CDS Code",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"DR",
+        "SEIS":"District of SPED Accountability CDS Code",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"SS",
+        "SEIS":"School CDS Code",
+        "needs_mapping": false
+      },
+      {
+        "Aeries":"TY",
+        "SEIS":"School Type (Attendance School)",
+        "needs_mapping": true
+      },
+      {
+        "Aeries":"IRC",
+        "SEIS":"Percent IN Regular Class",
+        "needs_mapping": true
+      },
+      {
+        "Aeries":"SI",
+        "SEIS":"Case Manager",
+        "needs_mapping":true
+      }
+    ]
+}

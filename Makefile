@@ -1,4 +1,4 @@
-.PHONY: create_env_mac create_env_win start_env start start_container requirements_mac requirements_win build run stop_container clean_docker
+.PHONY: create_env_mac create_env_win start_env install_requirements start start_container requirements_mac requirements_win build run stop_container clean_docker
 
 # creates venv on mac
 create_env_mac:
@@ -8,9 +8,13 @@ create_env_mac:
 create_env_win:
 	py -m venv env
 
-# starts venv (both mac and windows)
+# starts venv mac (windows starts automatically?)
 start_env:
-	source env/bin/activate 
+	source env/bin/activate
+
+# install requirements on windows
+install_requirements:
+	pip install -r requirements.txt
 
 # starts python application
 start:
