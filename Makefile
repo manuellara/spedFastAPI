@@ -22,7 +22,7 @@ start:
 
 # dockerfile start up command
 start_container:
-	uvicorn main:app --host=0.0.0.0 --reload
+	uvicorn main:app --host=0.0.0.0
 
 # outputs requirements for mac
 requirements_mac:
