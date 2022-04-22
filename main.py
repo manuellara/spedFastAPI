@@ -29,7 +29,7 @@ async def upload_csv(input: UploadFile = File(...)):
     getDroppedSEISIDs(seisEntered)
 
     # read in the filtered CSV (District ID cleaned up)
-    seisEntered = pd.read_csv("seisEntered_filtered.csv")
+    seisEntered = pd.read_csv("outputFiles/seisEntered_filtered.csv")
 
     # convert District ID into int data type
     seisEntered['District ID'] = seisEntered['District ID'].apply(int)
@@ -61,11 +61,11 @@ async def upload_csv(input: UploadFile = File(...)):
             query = f'SELECT * FROM CSE WHERE CSE.ID IN ({values});'
 
             # execute query
-            print("Running SQL query...")
+            # print("Running SQL query...")
             df = pd.read_sql_query(query, con=cnxn)
 
             # kill SQL Server connection
-            print("Success...closing connection to SQL Server")
+            # print("Success...closing connection to SQL Server")
             cnxn.dispose()
     except Exception as e:
         print("Something went wrong trying to query SQL Server: ", e)
@@ -86,7 +86,7 @@ async def upload_csv(input: UploadFile = File(...)):
 
     # creates 1 file:
         # Aeries output.csv: Aeries CSE table snapshot 
-    df.to_csv("Aeries output.csv", index = False)
+    df.to_csv("outputFiles/Aeries output.csv", index = False)
 
 
     # opens mappings json file
@@ -120,15 +120,15 @@ async def upload_csv(input: UploadFile = File(...)):
 
     # creates 1 file:
         # test_merge.csv: outfile from inserting SEIS data values into Aeries CSE table
-    df.to_csv("test_merge.csv", index=False)
+    df.to_csv("outputFiles/test_merge.csv", index=False)
 
     # creates 1 file:
         # compare_data.json: compares the data diffrences with initial Aeries CSE snapshot and merged data
-    compareCSV( "Aeries output.csv", "test_merge.csv", "ID", "ID" )
+    compareCSV("outputFiles/Aeries output.csv", "outputFiles/test_merge.csv", "ID", "ID")
 
 
 
-    jsonCompare = open('compare_data.json')
+    jsonCompare = open('outputFiles/compare_data.json')
     data = json.load(jsonCompare)
 
     return data
