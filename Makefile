@@ -38,11 +38,11 @@ build:
 
 # starts a container based off the spedfastapi image
 run:
-	docker run -d --rm --name pythonfastapi -p 8000:8000 spedfastapi
+	docker run -d --rm --name fastapi -p 8000:8000 --env-file .env spedfastapi
 
 # stops docker container by name
 stop_container:
-	docker kill pythonfastapi
+	docker kill fastapi
 
 # cleans up system 
 clean_docker:

@@ -10,7 +10,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # copy the main.py and Makefile into the working directory
-COPY main.py Makefile ./
+COPY main.py Makefile Datasync mappings ./
 
 # start up command
 CMD [ "make", "start_container" ]
