@@ -5,16 +5,16 @@ from DataSync.compareCSV.compare import compareSEIS
 
 def getDroppedSEISIDs(seisFile):
     # create 1st snapshot csv from dataframe
-    seisFile.to_csv('seisEntered_snapshot.csv', index=False)
+    seisFile.to_csv('outputFiles/seisEntered_snapshot.csv', index=False)
 
     # drop rows where District ID is not numeric or blank
     seisFileFiltered = seisFile[ pd.to_numeric( seisFile['District ID'], errors='coerce' ).notnull() ]
 
     # create 2nd csv snapshot 
-    seisFileFiltered.to_csv('seisEntered_filtered.csv', index=False)
+    seisFileFiltered.to_csv('outputFiles/seisEntered_filtered.csv', index=False)
 
     # compare 1st and 2nd snapshots to find dropped records 
-    compareSEIS( "seisEntered_snapshot.csv", "seisEntered_filtered.csv", "District ID", "District ID" )
+    compareSEIS( "outputFiles/seisEntered_snapshot.csv", "outputFiles/seisEntered_filtered.csv", "District ID", "District ID" )
 
 
 
