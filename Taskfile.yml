@@ -1,58 +1,12 @@
 version: "3"
 
 tasks:
-
-  create_env_mac:
-    desc: Creates virtual env on macOS
-    cmds: 
-    - python3 -m venv env
-
-  create_env_win:
-    desc: Creates virtual env on Windows
-    cmds: 
-    - py -m venv env
-
-  install_requirements:
+  install_reqs:
     desc: Installs requirements
     cmds:
     - pip install -r requirements.txt
 
-  start:
-    desc: Starts application locally with reload
-    cmds:
-    - uvicorn main:app --reload
-
-  start_container:
-    desc: Starts application in container with no reload
-    cmds:
-    - uvicorn main:app --reload
-
-  get_requirements_mac:
-    desc: Outputs requirements.txt on macOS
+  get_reqs:
+    desc: Outputs requirements.txt
     cmds:
     - python3 -m pip freeze > requirements.txt
-
-  get_requirements_win:
-    desc: Outputs requirements.txt on Windows
-    cmds:
-    - py -m pip freeze > requirements.txt
-
-  build:
-    desc: Build Docker image and tag it as "spedfastapi"
-    cmds:
-    - docker build -t spedfastapi .
-
-  run:
-    desc: Create container using "spedfastapi" image and use .env file
-    cmds:
-    - docker run -d --rm --name fastapi -p 8000:8000 --env-file .env spedfastapi
-
-  stop_container:
-    desc: Kill container called "spedfastapi"
-    cmds:
-    - docker kill fastapi
-
-  clean_docker:
-    desc: Clean up Docker on system
-    cmds:
-    - docker system prune -f
