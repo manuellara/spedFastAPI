@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  install_reqs:
+    desc: Installs requirements
+    cmds:
+    - pip install -r requirements.txt
+
+  get_reqs:
+    desc: Outputs requirements.txt
+    cmds:
+    - python3 -m pip freeze > requirements.txt

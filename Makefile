@@ -12,7 +12,7 @@ create_env_win:
 start_env:
 	source env/bin/activate
 
-# install requirements on windows
+# install requirements
 install_requirements:
 	pip install -r requirements.txt
 
