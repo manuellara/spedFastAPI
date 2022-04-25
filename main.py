@@ -2,7 +2,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 import pandas as pd
 import json
 from DataSync.compareCSV.compare import compareCSV
-from DataSync.pyODBC.connector import connectToSQLServer
+from DataSync.pyAlchemy.connector import connectToSQLServer
 from DataSync.pandasFunc.pandasOperations import getDroppedSEISIDs, replaceVal, getListOfSpEdIDs, replaceValWithMapping
 
 app = FastAPI()
@@ -81,7 +81,7 @@ async def upload_csv(input: UploadFile = File(...)):
     except Exception as e:
         print(f'Something went wrong trying to convert Aeries datetime field to readable format: CSE.{i}')
         print(e)
-        raise HTTPException(status_code=500, detail="Could not convert date columns")
+        raise HTTPException(status_code=500, detail=f'Could not convert Aeries CSE.{i} date column')
 
 
     # creates 1 file:

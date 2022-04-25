@@ -1,6 +1,6 @@
 import pandas as pd 
 import json
-from DataSync.pyODBC.connector import connectToSQLServer
+from DataSync.pyAlchemy.connector import connectToSQLServer
 from DataSync.compareCSV.compare import compareSEIS
 
 def getDroppedSEISIDs(seisFile):

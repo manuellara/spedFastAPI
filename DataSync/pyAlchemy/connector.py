@@ -20,12 +20,3 @@ def connectToSQLServer():
         print("Something went wrong while tring to connect to SQL Server")
         return None
     
-
-
-# def closeCnxn(cnxn):
-    
-#     try:
-#         cnxn.close()
-#         return print("Connection to SQL Server closed successfully")
-#     except:
-#         return print("Something went wrong while tring to close the connection to SQL Server")
