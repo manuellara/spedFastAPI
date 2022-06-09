@@ -5,16 +5,16 @@ from DataSync.compareCSV.compare import compareSEIS
 
 def getDroppedSEISIDs(seisFile):
     # create 1st snapshot csv from dataframe
-    seisFile.to_csv('outputFiles/seisEntered_snapshot.csv', index=False)
+    seisFile.to_csv('outputFiles/seisFile_snapshot.csv', index=False)
 
     # drop rows where District ID is not numeric or blank
     seisFileFiltered = seisFile[ pd.to_numeric( seisFile['District ID'], errors='coerce' ).notnull() ]
 
     # create 2nd csv snapshot 
-    seisFileFiltered.to_csv('outputFiles/seisEntered_filtered.csv', index=False)
+    seisFileFiltered.to_csv('outputFiles/seisFile_filtered.csv', index=False)
 
     # compare 1st and 2nd snapshots to find dropped records 
-    compareSEIS( "outputFiles/seisEntered_snapshot.csv", "outputFiles/seisEntered_filtered.csv", "District ID", "District ID" )
+    compareSEIS( "outputFiles/seisFile_snapshot.csv", "outputFiles/seisFile_filtered.csv", "District ID", "District ID" )
 
 
 
@@ -53,7 +53,7 @@ def replaceVal(df1 , col1, val1, df2, col2, val2):
     # get ID's row index
     indexB = getIndex( df2, 'District ID', val2 )
 
-    # replace Aeries output df value with seisEntered df value
+    # replace Aeries output df value with seisFile df value
     df1.at[indexA, col1] = df2.at[indexB, col2]
 
     return df1
@@ -153,7 +153,7 @@ def replaceValWithMapping(df1, col1, val1, df2, col2, val2):
                     print(e)
                     print(val2)
                     quit()
-                        
+
     else:
         return df1 
 

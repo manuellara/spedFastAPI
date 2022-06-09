@@ -1,22 +1,19 @@
-# import pyodbc
 from sqlalchemy import create_engine
-from dotenv import load_dotenv
-load_dotenv()
 import os
 
 def connectToSQLServer():
 
-    server = os.environ.get("server")
-    database = os.environ.get("database")
-    username = os.environ.get("username")
-    password = os.environ.get("password")
+    sqlDriver='ODBC+Driver+17+for+SQL+Server'
+    sqlServer = os.environ['sqlServer']
+    sqlDatabase = os.environ['sqlDatabase']
+    sqlSA = os.environ['sqlSA']
+    sqlSAPass = os.environ['sqlSAPass']
 
     try:
-        # cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password+';Trusted_Connection=yes;')
-        engine = create_engine(f"mssql+pyodbc://{username}:{password}@{server}/{database}?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server")
-        # print("Connected to SQL Server successfully")
+        # engine = create_engine(f'mssql+pyodbc://{username}:{password}@{server}/{database}?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server') # run locally
+        engine = create_engine(f'mssql://{sqlSA}:{sqlSAPass}@{sqlServer}/{sqlDatabase}?driver={sqlDriver}')
         return engine
-    except:
-        print("Something went wrong while tring to connect to SQL Server")
+    except Exception as e:
+        print(e)
+        print("Something went wrong while trying to connect to SQL Server")
         return None
-    

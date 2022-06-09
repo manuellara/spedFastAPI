@@ -1,72 +1,75 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 import pandas as pd
 import json
+from fastapi.responses import FileResponse
 from DataSync.compareCSV.compare import compareCSV
 from DataSync.pyAlchemy.connector import connectToSQLServer
 from DataSync.pandasFunc.pandasOperations import getDroppedSEISIDs, replaceVal, getListOfSpEdIDs, replaceValWithMapping
 
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {"message": "spedFastAPI"}
+@app.get("/health", tags=["Health"])
+async def health():
+    return {"message": "SpEd FastAPI is running!"}
 
-@app.post("/upload_csv")
+
+@app.post("/upload_csv", tags=["Upload SEIS CSV"])
 async def upload_csv(input: UploadFile = File(...)):
 
     try:
         # read CSV file into dataframe 
-        seisEntered = pd.read_csv(input.file)
+        seisFile = pd.read_csv(input.file)
     except Exception as e:
         print("unable to convert input file to pandas df")
         print(e)
-        raise HTTPException(status_code=415, detail="please upload a file with the extention .CSV")
+        raise HTTPException(status_code=415, detail="Please upload a file with the extention .CSV")
 
     # creates 3 files:
-        # seisEntered_snapshot.csv: initial snapshot in df format
-        # seisEntered_filtered.csv: District ID is filtered and only numeric values are kept
+        # seisFile_snapshot.csv: initial snapshot in df format
+        # seisFile_filtered.csv: District ID is filtered and only numeric values are kept
         # compare_SEIS.json: snapshot.csv and filtered.csv are compared and dropped District IDs are listed 
-    getDroppedSEISIDs(seisEntered)
+    getDroppedSEISIDs(seisFile)
 
     # read in the filtered CSV (District ID cleaned up)
-    seisEntered = pd.read_csv("outputFiles/seisEntered_filtered.csv")
+    seisFile = pd.read_csv("outputFiles/seisFile_filtered.csv")
 
     # convert District ID into int data type
-    seisEntered['District ID'] = seisEntered['District ID'].apply(int)
+    seisFile['District ID'] = seisFile['District ID'].apply(int)
 
 
     try:
         # convert 'Disability 1 Code' and 'Disability 2 Code' to integer type
         colsToInt = ['Disability 1 Code', 'Disability 2 Code']
         for i in colsToInt:
-            seisEntered[i] = pd.to_numeric(seisEntered[i],errors='coerce').astype(pd.Int64Dtype())
+            seisFile[i] = pd.to_numeric(seisFile[i],errors='coerce').astype(pd.Int64Dtype())
     except Exception as e:
         print("unable to convert 'Disability 1 Code' and 'Disability 2 Code' to integer type")
         print(e)
         raise HTTPException(status_code=500, detail="Could not convert Disability codes")
 
     # returns SpEd IDs as str for use with SQL query
-    values = getListOfSpEdIDs(seisEntered['District ID'].tolist())
+    values = getListOfSpEdIDs(seisFile['District ID'].tolist())
 
     # initialize empty df for 'Aeries output.csv'
     df = pd.DataFrame()
 
-
     # query SQL Server 
     try:
         cnxn = connectToSQLServer()
+
+        if cnxn == None:
+            raise HTTPException(status_code=500, detail="SQL Server Connection string returned None")
         
-        if cnxn != None:
-            # build query
-            query = f'SELECT * FROM CSE WHERE CSE.ID IN ({values});'
+        # build query
+        query = f'SELECT * FROM CSE WHERE CSE.ID IN ({values});'
 
-            # execute query
-            # print("Running SQL query...")
-            df = pd.read_sql_query(query, con=cnxn)
+        # execute query
+        # print("Running SQL query...")
+        df = pd.read_sql_query(query, con=cnxn)
 
-            # kill SQL Server connection
-            # print("Success...closing connection to SQL Server")
-            cnxn.dispose()
+        # kill SQL Server connection
+        # print("Success...closing connection to SQL Server")
+        cnxn.dispose()            
     except Exception as e:
         print("Something went wrong trying to query SQL Server: ", e)
         print(e)
@@ -81,12 +84,12 @@ async def upload_csv(input: UploadFile = File(...)):
     except Exception as e:
         print(f'Something went wrong trying to convert Aeries datetime field to readable format: CSE.{i}')
         print(e)
-        raise HTTPException(status_code=500, detail=f'Could not convert Aeries CSE.{i} date column')
+        raise HTTPException(status_code=500, detail=f'Could not convert Aeries CSE.{i} date column {df[i]}')
 
 
     # creates 1 file:
-        # Aeries output.csv: Aeries CSE table snapshot 
-    df.to_csv("outputFiles/Aeries output.csv", index = False)
+        # aeries_cse_output.csv: Aeries CSE table snapshot 
+    df.to_csv("outputFiles/aeries_cse_output.csv", index = False)
 
 
     # opens mappings json file
@@ -103,7 +106,7 @@ async def upload_csv(input: UploadFile = File(...)):
             if i['needs_mapping'] == True:
                 try:
                     ## replace value function for attributes that need mapping
-                    df = replaceValWithMapping( df, i['Aeries'], id, seisEntered, i['SEIS'], id )
+                    df = replaceValWithMapping( df, i['Aeries'], id, seisFile, i['SEIS'], id )
                 except Exception as e:
                     print(e)
                     print(id)
@@ -111,7 +114,7 @@ async def upload_csv(input: UploadFile = File(...)):
             else:
                 try:
                     ## replace value function for attributes that do not need mapping
-                    df = replaceVal( df, i['Aeries'], id, seisEntered, i['SEIS'], id )
+                    df = replaceVal( df, i['Aeries'], id, seisFile, i['SEIS'], id )
                 except Exception as e:
                     print(e)
                     print(id)
@@ -119,17 +122,32 @@ async def upload_csv(input: UploadFile = File(...)):
 
 
     # creates 1 file:
-        # test_merge.csv: outfile from inserting SEIS data values into Aeries CSE table
-    df.to_csv("outputFiles/test_merge.csv", index=False)
+        # merge.csv: outfile from inserting SEIS data values into Aeries CSE table
+    df.to_csv("outputFiles/merge.csv", index=False)
 
     # creates 1 file:
         # compare_data.json: compares the data diffrences with initial Aeries CSE snapshot and merged data
-    compareCSV("outputFiles/Aeries output.csv", "outputFiles/test_merge.csv", "ID", "ID")
+    compareCSV("outputFiles/aeries_cse_output.csv", "outputFiles/merge.csv", "ID", "ID")
 
-
-
+    # returns difference as response
     jsonCompare = open('outputFiles/compare_data.json')
     data = json.load(jsonCompare)
 
-    return data
-    # return {"message": f"{input.filename} uploaded successfully!"}
+    #return FileResponse('outputFiles/merge.csv', media_type='text/csv',filename='outputFiles/merge.csv')
+    # return data
+    return {"message": f"{input.filename} processed successfully!"}
+
+
+@app.post("/get_merged", tags=["Get Merged CSV"])
+async def get_merged():
+    return FileResponse('outputFiles/merge.csv', media_type='text/csv', filename='outputFiles/merge.csv')
+
+
+@app.post("/get_diff", tags=["Get Differences JSON"])
+async def get_diff():
+    return FileResponse('outputFiles/compare_data.json', media_type='application/json', filename='outputFiles/compare_data.json')
+
+
+@app.post("/get_bad_seis", tags=["Get bad SEIS JSON"])
+async def get_bad_seis():
+    return FileResponse('outputFiles/compare_SEIS.json', media_type='application/json', filename='outputFiles/compare_SEIS.json')
