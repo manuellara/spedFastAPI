@@ -2,7 +2,6 @@
 /.vscode
 /env
 /tests
-/pgData
 convertDate.py 
 Taskfile.yml
 docker-compose.yml

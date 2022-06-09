@@ -84,7 +84,7 @@ async def upload_csv(input: UploadFile = File(...)):
     except Exception as e:
         print(f'Something went wrong trying to convert Aeries datetime field to readable format: CSE.{i}')
         print(e)
-        raise HTTPException(status_code=500, detail=f'Could not convert Aeries CSE.{i} date column {df[i]}')
+        raise HTTPException(status_code=500, detail=f'Could not convert Aeries CSE.{i}: {e}')
 
 
     # creates 1 file:

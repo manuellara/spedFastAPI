@@ -8,3 +8,5 @@ outputFiles/*[.csv, .json]
 convertDate.py
 
 /pgData/data
+
+/tests
