@@ -1,5 +1,7 @@
 FROM tadeorubio/pyodbc-msodbcsql17
 
+LABEL MAINTAINER="Manny Lara" EMAIL="malara@tustin.k12.ca.us"
+
 # create working directory
 WORKDIR /app
 
@@ -13,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # start up command
-CMD [ "make", "start_container" ]
+CMD [ "uvicorn", "main:app", "--host=0.0.0.0" ]

@@ -6,3 +6,4 @@ convertDate.py
 Taskfile.yml
 docker-compose.yml
 Dockerfile
+Makefile
