@@ -138,16 +138,16 @@ async def upload_csv(input: UploadFile = File(...)):
     return {"message": f"{input.filename} processed successfully!"}
 
 
-@app.post("/get_merged", tags=["Get Merged CSV"])
+@app.get("/get_merged", tags=["Get Merged CSV"])
 async def get_merged():
     return FileResponse('outputFiles/merge.csv', media_type='text/csv', filename='outputFiles/merge.csv')
 
 
-@app.post("/get_diff", tags=["Get Differences JSON"])
+@app.get("/get_diff", tags=["Get Differences JSON"])
 async def get_diff():
     return FileResponse('outputFiles/compare_data.json', media_type='application/json', filename='outputFiles/compare_data.json')
 
 
-@app.post("/get_bad_seis", tags=["Get bad SEIS JSON"])
+@app.get("/get_bad_seis", tags=["Get bad SEIS JSON"])
 async def get_bad_seis():
     return FileResponse('outputFiles/compare_SEIS.json', media_type='application/json', filename='outputFiles/compare_SEIS.json')
