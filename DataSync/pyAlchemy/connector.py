@@ -7,10 +7,10 @@ load_dotenv()
 def connectToSQLServer():
 
     sqlDriver='ODBC+Driver+17+for+SQL+Server'
-    sqlServer = os.getenv['sqlServer']
-    sqlDatabase = os.getenv['sqlDatabase']
-    sqlSA = os.getenv['sqlSA']
-    sqlSAPass = os.getenv['sqlSAPass']
+    sqlServer = os.getenv('sqlServer')
+    sqlDatabase = os.getenv('sqlDatabase')
+    sqlSA = os.getenv('sqlSA')
+    sqlSAPass = os.getenv('sqlSAPass')
 
     try:
         # engine = create_engine(f'mssql+pyodbc://{username}:{password}@{server}/{database}?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server') # run locally
