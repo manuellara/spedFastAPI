@@ -6,4 +6,4 @@ __pycache__
 .vscode
 outputFiles/*[.csv, .json]
 
-/tests
+/tests/pytest-env
