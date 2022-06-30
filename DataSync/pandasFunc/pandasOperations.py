@@ -154,6 +154,26 @@ def replaceValWithMapping(df1, col1, val1, df2, col2, val2):
                     print(val2)
                     quit()
 
+    elif col2 == "Plan Type  (Edu Plan for SpEd Svcs)":
+        #open json mapping file
+        jsonFile = open('./mappings/education_plan_type_mapping.json')
+
+        # convert json to python compatible format
+        data = json.load(jsonFile)
+
+        # replace nan with ''
+        df2[col2] = df2[col2].fillna('') 
+
+        try:
+            if df2.at[indexB, col2] != '':
+                # replace Aeries output df value with mapped value 
+                df1.at[indexA, col1] = data[ df2.at[indexB, col2].strip() ]
+        except Exception as e:
+            print("Error with education plan type mapping")
+            print(e)
+            print(val2)
+            quit()
+
     else:
         return df1 
 

@@ -59,6 +59,11 @@
         "Aeries":"SI",
         "SEIS":"Case Manager",
         "needs_mapping":true
+      },
+      {
+        "Aeries":"PT",
+        "SEIS":"Plan Type  (Edu Plan for SpEd Svcs)",
+        "needs_mapping":true
       }
     ]
 }

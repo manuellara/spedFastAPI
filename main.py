@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 import pandas as pd
 import json
+from os.path import exists
 from fastapi.responses import FileResponse
 from DataSync.compareCSV.compare import compareCSV
 from DataSync.pyAlchemy.connector import connectToSQLServer
@@ -59,7 +60,7 @@ async def upload_csv(input: UploadFile = File(...)):
 
         if cnxn == None:
             raise HTTPException(status_code=500, detail="SQL Server Connection string returned None")
-        
+
         # build query
         query = f'SELECT * FROM CSE WHERE CSE.ID IN ({values});'
 
@@ -140,14 +141,35 @@ async def upload_csv(input: UploadFile = File(...)):
 
 @app.get("/get_merged", tags=["Get Merged CSV"])
 async def get_merged():
-    return FileResponse('outputFiles/merge.csv', media_type='text/csv', filename='outputFiles/merge.csv')
+    # check if file exists
+    file_exists = exists('outputFiles/merge.csv')
+
+    if file_exists:
+        return FileResponse('outputFiles/merge.csv', media_type='text/csv', filename='outputFiles/merge.csv')
+    else:
+        HTTPException(status_code=404, detail="Item not found")
+        return {"message": "File does not exist"}
 
 
 @app.get("/get_diff", tags=["Get Differences JSON"])
 async def get_diff():
-    return FileResponse('outputFiles/compare_data.json', media_type='application/json', filename='outputFiles/compare_data.json')
+    # check if file exists
+    file_exists = exists('outputFiles/compare_data.json')
+
+    if file_exists:
+        return FileResponse('outputFiles/compare_data.json', media_type='text/csv', filename='outputFiles/compare_data.json')
+    else:
+        HTTPException(status_code=404, detail="Item not found")
+        return {"message": "File does not exist"}
 
 
 @app.get("/get_bad_seis", tags=["Get bad SEIS JSON"])
 async def get_bad_seis():
-    return FileResponse('outputFiles/compare_SEIS.json', media_type='application/json', filename='outputFiles/compare_SEIS.json')
+    # check if file exists
+    file_exists = exists('outputFiles/compare_SEIS.json')
+    
+    if file_exists:
+        return FileResponse('outputFiles/compare_SEIS.json', media_type='text/csv', filename='outputFiles/compare_SEIS.json')
+    else:
+        HTTPException(status_code=404, detail="Item not found")
+        return {"message": "File does not exist"}
