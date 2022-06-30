@@ -1,5 +1,3 @@
-# spedFastAPI
-
 ## Overview
 
 This project intended to: 
@@ -18,7 +16,7 @@ This project intended to:
 
 * [ ] Get CSV files from SEIS
   * [x] Entered
-  * [ ] Exited
+  * [x] Exited
 * [ ] Read in SEIS files as dataframes
   * [x] Entered 
   * [ ] Exited 
@@ -44,7 +42,7 @@ This project intended to:
         * [x] School Type
         * [x] Percent IN Regular Class
         * [x] Case Manager
-        * [x] Ed Plan Type
+        * [x] Plan Type  (Edu Plan for SpEd Svcs)
       * [x] If no, process regular replace value function
 * [x] Export Aeries dataframe as CSV **merged.csv** as the snapshot with changes
 * [x] Compare original snapshot CSV against the snapshot with changes CSV
