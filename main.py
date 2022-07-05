@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 import pandas as pd
+import numpy as np
 import json
 from os.path import exists
 from fastapi.responses import FileResponse
@@ -122,6 +123,10 @@ async def upload_csv(input: UploadFile = File(...)):
                     raise HTTPException(status_code=500, detail="Problem with value that does not needs mapping")
 
 
+    # convert float column to int 
+    df['XR'] = df['XR'].astype('Int64', errors='ignore')
+
+    
     # creates 1 file:
         # merge.csv: outfile from inserting SEIS data values into Aeries CSE table
     df.to_csv("outputFiles/merge.csv", index=False)
