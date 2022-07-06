@@ -163,7 +163,7 @@ task run
 ### List Taskfile commands
 
 ```sh
-task ls
+task -l
 ```
 
 ### Count changes in compare file
