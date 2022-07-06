@@ -44,6 +44,7 @@ This project intended to:
         * [x] Case Manager
         * [x] Plan Type  (Edu Plan for SpEd Svcs)
       * [x] If no, process regular replace value function
+* [x] Convert XR column from float64 to Int64
 * [x] Export Aeries dataframe as CSV **merged.csv** as the snapshot with changes
 * [x] Compare original snapshot CSV against the snapshot with changes CSV
   * [x] Export change log to **compare_data.json**
@@ -107,7 +108,63 @@ This project intended to:
 | SBAC Participation Description in Science                                |                         |                   |           |
 
 
-## Utility scripts
+## Getting started
+
+### Clone the repo to your local machine
+
+```sh
+git clone https://github.com/manuellara/spedFastAPI.git
+```
+
+### Mappings 
+
+The `/mappings` folder contains mappings specific to **MY** school district, so you will need to review these files. Do not change the structure, only the values
+
+### Environment variables 
+
+Add a `.env` to the root directory with the following values: 
+- **sqlSA** (SQL Server service account username)
+- **sqlSAPass** (SQL Server service account password)
+- **sqlServer** (SQL Server server name)
+- **sqlDatabase** (Current Aeries database e.g. dst2...)
+
+### Run locally in a python virtual env
+
+In the root directory, [create a virtual env](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)
+
+Next, [activate the virtual env](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#activating-a-virtual-environment)
+
+Next, [install the requirements](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#using-requirements-files) 
+
+Finally, use the included Taskfile to start the api. If you don't have [Taskfile](https://taskfile.dev) installed, be sure to install it before running the next command
+
+```sh
+task start
+```
+
+### Build and run Docker container
+
+For this step, you will need [Docker](https://docs.docker.com/get-docker/) and [Taskfile](https:taskfile.dev) installed
+
+Using the Taskfile, run the following command to build the container
+
+```sh
+task build
+```
+
+After the container has been built, run the following command to run the container
+
+```sh
+task run 
+```
+
+## Utility commands/scripts
+
+### List Taskfile commands
+
+```sh
+task ls
+```
 
 ### Count changes in compare file
 
@@ -119,12 +176,6 @@ data = json.load(jsonFile)
 
 print( len(data['changed']) )
 ```
-
-
-## Local Development
-
-Use the Makefile or Taskfile included
-
 
 ## Resources
 

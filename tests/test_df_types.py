@@ -10,4 +10,5 @@ def testDataTypes():
 
     print(df['XR'].dtype)
 
+    # check if the XR column is of Int64 type 
     assert ptypes.is_int64_dtype(df['XR'])

@@ -126,7 +126,7 @@ async def upload_csv(input: UploadFile = File(...)):
     # convert float column to int 
     df['XR'] = df['XR'].astype('Int64', errors='ignore')
 
-    
+
     # creates 1 file:
         # merge.csv: outfile from inserting SEIS data values into Aeries CSE table
     df.to_csv("outputFiles/merge.csv", index=False)
