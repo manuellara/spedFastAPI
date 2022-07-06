@@ -2,40 +2,10 @@ version: "3"
 
 tasks:
 
-  create_env_mac:
-    desc: Creates virtual env on macOS
-    cmds: 
-    - python3 -m venv env
-
-  create_env_win:
-    desc: Creates virtual env on Windows
-    cmds: 
-    - py -m venv env
-
-  install_requirements:
-    desc: Installs requirements
-    cmds:
-    - pip install -r requirements.txt
-
   start:
     desc: Starts application locally with reload
     cmds:
     - uvicorn main:app --reload
-
-  start_container:
-    desc: Starts application in container with no reload
-    cmds:
-    - uvicorn main:app --reload
-
-  get_requirements_mac:
-    desc: Outputs requirements.txt on macOS
-    cmds:
-    - python3 -m pip freeze > requirements.txt
-
-  get_requirements_win:
-    desc: Outputs requirements.txt on Windows
-    cmds:
-    - py -m pip freeze > requirements.txt
 
   build:
     desc: Build Docker image and tag it as "spedfastapi"
