@@ -17,12 +17,12 @@ tasks:
     cmds:
     - docker run -d --rm --name fastapi -p 8000:8000 --env-file .env spedfastapi
 
-  stop_container:
+  stop:
     desc: Kill container called "spedfastapi"
     cmds:
     - docker kill fastapi
 
-  clean_docker:
+  clean:
     desc: Clean up Docker on system
     cmds:
     - docker system prune -f

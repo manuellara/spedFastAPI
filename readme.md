@@ -12,6 +12,18 @@ This project intended to:
 * Output a merged CSV file for upload into Aeries with all the changes
 * Output a change log (dropped IDs and updated values)
 
+## Sequence Diagram
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor User
+  User ->> spedFastAPI: Upload SEIS Entered/Exited .CSV
+  spedFastAPI ->> spedFastAPI: Process file
+  User ->> spedFastAPI: Request files
+  spedFastAPI -->> User: Return files
+```
+
 ## TODOs
 
 * [ ] Get CSV files from SEIS
