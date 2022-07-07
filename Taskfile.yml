@@ -3,7 +3,7 @@ version: "3"
 tasks:
 
   start:
-    desc: Starts application locally with reload
+    desc: Starts application locally with reload enabled
     cmds:
     - uvicorn main:app --reload
 
@@ -26,3 +26,9 @@ tasks:
     desc: Clean up Docker on system
     cmds:
     - docker system prune -f
+
+  upload:
+    desc: Re-tag docker image and upload to Tustin USD Azure container registry
+    cmds:
+    - docker tag spedfastapi <TUSD container registry>.azurecr.io/spedfastapi
+    - docker push <TUSD container registry>.azurecr.io/spedfastapi
