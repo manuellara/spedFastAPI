@@ -1,6 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 import pandas as pd
-import numpy as np
 import json
 from os.path import exists
 from fastapi.responses import FileResponse
